@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>E-Library | Welcome</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <!-- Background + Overlay -->
+  <div class="bg-overlay"></div>
+  <canvas id="particles"></canvas>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <h2 class="logo">📚 E-Library</h2>
+    <ul class="nav-links">
+      <li><a href="chemistry.html" target="_blank">Chemistry</a></li>
+      <li><a href="physics.html" target="_blank">Physics</a></li>
+      <li><a href="maths.html" target="_blank">Maths</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="content">
+    <div class="glass-box">
+      <h1 class="typing glow"></h1>
+      <p class="fade-in">✨ Select a subject to explore resources:</p>
+      <div class="subject-buttons">
+        <a href="chemistry.html" target="_blank" class="btn ripple">Chemistry</a>
+        <a href="physics.html" target="_blank" class="btn ripple">Physics</a>
+        <a href="maths.html" target="_blank" class="btn ripple">Maths</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer><p>Keep Learning | Designed by <b>Adarsh</b></p></footer>
+
+  <script>
+    // Typing Effect
+    const text="Welcome to Our Library "; 
+    let i=0;
+    (function type(){
+      if(i<text.length){
+        document.querySelector(".typing").innerHTML+=text[i++];
+        setTimeout(type,70);
+      }
+    })();
+
+    // Ripple Effect
+    document.querySelectorAll(".ripple").forEach(b=>b.addEventListener("click",e=>{
+      const s=document.createElement("span");
+      s.className="circle";
+      s.style.left=(e.clientX-b.getBoundingClientRect().left)+"px";
+      s.style.top=(e.clientY-b.getBoundingClientRect().top)+"px";
+      b.appendChild(s);
+      setTimeout(()=>s.remove(),500);
+    }));
+
+    // Navbar scroll effect
+    addEventListener("scroll",()=>document.querySelector(".navbar")
+      .classList.toggle("scrolled",scrollY>50));
+
+    // Particles Background
+    const canvas=document.getElementById("particles");
+    const ctx=canvas.getContext("2d");
+    let particles=[];
+    canvas.width=innerWidth; canvas.height=innerHeight;
+
+    for(let i=0;i<60;i++){
+      particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,
+        r:Math.random()*3+1,dx:(Math.random()-0.5),dy:(Math.random()-0.5)});
+    }
+    function animate(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle="rgba(255,255,255,0.8)";
+      particles.forEach(p=>{
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+        p.x+=p.dx; p.y+=p.dy;
+        if(p.x<0||p.x>canvas.width) p.dx*=-1;
+        if(p.y<0||p.y>canvas.height) p.dy*=-1;
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+    addEventListener("resize",()=>{canvas.width=innerWidth; canvas.height=innerHeight;});
+  </script>
+</body>
+</html>
